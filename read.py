@@ -1,7 +1,7 @@
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 import random
-from sheetID import sheet
+from sheetID import sheet, teamSheet
 
 SERVICE_ACCOUNT_FILE = 'keys.json'
 # If modifying these scopes, delete the file token.json.
@@ -206,36 +206,34 @@ def makingTeams(values, teamNum):
     #-------------------------------------------------------------------------------#
     #if teams still not full, restart this function (and also just randomly fill so not empty for last team)
     if(teamNum==numGames and teamCount<10):  
-        #something is wrong here but idk why
         emp1=True
         emp2=True
-
+        #while team 1 or team 2 have empty spots on their team
         while((emp1==True or emp2==True)):
-            print(teamCount)
+            #print(teamCount)
             #find empty spot
             index = -1
             index1=-1
-            print("team1:",team1)
+            #print("team1:",team1)
             for k in range(0,5):
                 if team1[k]=="Empty":
                     index=k
                     break
-            print("index:",index)
-            print("thing at that spot:", team1[index])
+            #print("index:",index)
+            #print("thing at that spot:", team1[index])
             for l in range(numPlayers):
-                print("values",values[l])
+                #print("values",values[l])
                 if values[l][7]==0:
-                    print("found a zero, index=",index)
+                    #print("found a zero, index=",index)
                     if index!=-1:
-                        print("is it even in here?")
                         #print(index)
                         values[l][7]=teamNum
                         team1[index]=values[l]
                         teamCount+=1
                         team1score+=rankedScores(values[l][6])
-                        print("team1[index]:", team1[index])
+                        #print("team1[index]:", team1[index])
                         break
-            print("after adding to team1:",team1)
+            #print("after adding to team1:",team1)
             for k in range(5):
                 if team2[k]=="Empty":
                     index1=k
@@ -254,15 +252,17 @@ def makingTeams(values, teamNum):
             for k in range(5):
                 if team2[k]=="Empty":
                     emp2=True
+            '''
             if(emp1==False):
                 print(team1)
             if(emp2==False):
                 print(team2)
+            '''
         #print(team1)
         for j in range(0,numPlayers):
                 if (values[j][7]==teamNum):
                     values[j][7]=0
-    print("everything full so leave")
+    #print("everything full so leave")
     return team1, team1score, team2, team2score, False
 
 allTeams=[]
@@ -322,19 +322,6 @@ def constructing(numGames):
     #end of for loop for # of games
     return True
 
-    """
-    request = sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID, 
-                                range="Teams!A"+str(1+i*20), valueInputOption="USER_ENTERED", body={"values":team1Total}).execute()
-    request = sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID, 
-                                range="Teams!A"+str(9+i*20), valueInputOption="USER_ENTERED", body={"values":team2Total}).execute()
-    #output teams onto google sheet
-    request = sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID, 
-                                range="Teams!B"+str(2+i*18), valueInputOption="USER_ENTERED", body={"values":team1}).execute()
-    request = sheet.values().update(spreadsheetId=SAMPLE_SPREADSHEET_ID, 
-                                range="Teams!B"+str(10+i*18), valueInputOption="USER_ENTERED", body={"values":team2}).execute()
-    """
-
-
 
 #making sure u can make a certain amount of teams; has to be multiples of 10
 numGames=int(numPlayers/10)
@@ -353,15 +340,17 @@ while (completed==False):
     maxLoops+=1
 
 #need to make it stop at some point and output "best" team
+'''
 for i in range(0,numPlayers):
     print(values[i])
+'''
 
 clear_values_request_body = {  
     'requests': [
         {
             'updateCells': {
                 'range': {
-                    'sheetId': '1560764505'
+                    'sheetId': teamSheet
 
                 },
                 'fields': '*'
@@ -369,6 +358,7 @@ clear_values_request_body = {
         }
     ]
 }
+
 service.spreadsheets().batchUpdate(
     spreadsheetId=SAMPLE_SPREADSHEET_ID,
     body=clear_values_request_body
