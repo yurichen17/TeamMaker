@@ -1,6 +1,7 @@
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 import random
+from sheetID import sheet
 
 SERVICE_ACCOUNT_FILE = 'keys.json'
 # If modifying these scopes, delete the file token.json.
@@ -13,7 +14,7 @@ creds = service_account.Credentials.from_service_account_file(
 
 
 # The ID and range of a sample spreadsheet.
-SAMPLE_SPREADSHEET_ID = '15Y-49jdWcaKTVou1cKkDwLrtZTnXxCn8s0fUZUxCHbQ'
+SAMPLE_SPREADSHEET_ID = sheet
 
 service = build('sheets', 'v4', credentials=creds)
 
